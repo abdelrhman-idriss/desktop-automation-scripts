@@ -20,14 +20,13 @@ global trans := -1
 
 ^3::
 ClearPrinterQueue:
-SplashImage,, W325 H100,, `nPlease Wait`, Printer Queue Being Cleared!!!`n`n This May Take Up To 10 Seconds, Clear Printer Queue
-Runwait, %comspec% /c "net stop spooler",, hide ; Terminate the Print Spooler
-; Windows XP has it's Print Queue located at the path used below. Adjust if necessary for your version of Windows.
-Runwait, %comspec% /c "del C:\Windows\System32\spool\printers\* /Q /F /S",, hide ;  Delete all files in the Print Queue
-Runwait, %comspec% /c "net start spooler",, hide ; Re-Start the Print Spooler
-splashimage, off
+    ToolTip, Clearing Printer Queue... Please wait.
+    RunWait, %ComSpec% /c "net stop spooler",, Hide
+    RunWait, %ComSpec% /c "del /Q /F /S ""%SystemRoot%\System32\spool\printers\*""",, Hide
+    RunWait, %ComSpec% /c "net start spooler",, Hide
+    ToolTip, Printer Queue Cleared Successfully!
+    SetTimer, RemoveToolTip, -2000
 return
-
 
 ^1::
 ;Run, notepad.exe
